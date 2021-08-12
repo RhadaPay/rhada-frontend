@@ -37,7 +37,6 @@
                 :field="field"
                 :disabled="field.disabled"
                 :default="field.default"
-                @change="updateDate"
               />
             </v-col>
           </template>

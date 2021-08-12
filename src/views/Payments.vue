@@ -49,20 +49,19 @@ export default {
   },
   methods: {
     async startPayment() {
-
-
       const user = this.sf.user({
-        address: this.walletAddress[0],
+        address: this.walletAddress[0], // TODO: should be equal to TradeableCashflowWithAllowanceFactory.cashflowsSender(jobId)
         //fDaiX on Mumbai address
         token: "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
       });
 
+      //Only works sometimes, should use the superfluid rpc https://rpc-endpoints.superfluid.dev/matic or thegraph implementations
       const details = await user.details();
       console.log(details);
 
     await user.flow({
-           recipient: '',
-           flowRate: '289351851851852'
+           recipient: '', //TODO: should be calling TradeableCashflowWithAllowanceFactory.cashflowsRecipient(jobId)
+           flowRate: '' //TODO: should be calling TradeableCashflowWithAllowanceFactory.maxAllowedFlows(jobId)
      });
     },
   },
