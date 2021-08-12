@@ -51,10 +51,10 @@
         <v-card>
           <v-card-title>Event Stream - Monthly</v-card-title>
           <div>
-            <line-chart
-              :chartData="datacollection"
+            <scatter-chart
+              :chartData="datacollectionScatter"
               :options="{ responsive: true, maintainAspectRatio: false }"
-            ></line-chart>
+            ></scatter-chart>
             <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
@@ -70,7 +70,7 @@
             <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
-      </v-col>      
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -78,7 +78,8 @@
 import Vue from "vue";
 
 // @ts-ignore-next-line
-import { LineChart } from "@/LineChart";
+import { LineChart, ScatterChart } from "@/LineChart";
+import { Point } from "chart.js";
 
 const labels = [
   "January",
@@ -95,15 +96,28 @@ const labels = [
   "December",
 ];
 const data = (): number[] => labels.map((_) => Math.floor(Math.random() * 100));
+const scatterData = (length: number): Point[] => { 
+  return Array
+    .apply(null, new Array(length))
+    .map(_ => {
+      return {
+        x: Math.random(),
+        y: Math.random()
+      }
+    }
+  )
+};
 
 export default Vue.extend({
   components: {
     LineChart,
+    ScatterChart
   },
   data: () => ({
     label: "Github Commits",
     options: { responsive: true },
     datacollection: null as any,
+    datacollectionScatter: null as any,
   }),
   mounted() {
     this.fillData();
@@ -112,7 +126,7 @@ export default Vue.extend({
     color(): string {
       const { primary } = this.$vuetify.theme.currentTheme;
       if (primary) {
-        return String(primary);
+        return primary.toString();
       } else {
         return "grey";
       }
@@ -130,6 +144,17 @@ export default Vue.extend({
           },
         ],
       };
+      this.datacollectionScatter = {
+        labels,
+        datasets: [
+          {
+            label: 'Scatter Dataset',
+            pointBackgroundColor: this.$vuetify.theme.currentTheme.accent,
+            data: scatterData(20)
+          }
+        ]
+      }
+      console.log(this.datacollectionScatter)
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5;

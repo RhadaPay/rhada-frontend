@@ -30,7 +30,7 @@ export class BarChart extends mixins(Props, Line) {
   }
 }
 
-@Component({ extends: Line, mixins: [chartMixins.reactiveProp] })
+@Component({ extends: Scatter, mixins: [chartMixins.reactiveProp] })
 export class ScatterChart extends mixins(Props, Line) {
   mounted(): void {
     this.renderChart(this.chartData, this.options);
