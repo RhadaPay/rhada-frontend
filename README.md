@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # frontend
 
 ## Project setup
@@ -28,6 +27,3 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-=======
-# rhada-frontend
->>>>>>> 4ea67883630e822c5a26f42127e28f7066c8fb27

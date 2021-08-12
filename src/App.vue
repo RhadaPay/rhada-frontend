@@ -5,7 +5,7 @@
       <v-spacer />
       <v-switch :label="theme" @change="toggleTheme" />
     </v-app-bar>
-    <v-main>
+    <v-main class="my-5 d-flex justify-center align-center">
       <router-view />
     </v-main>
   </v-app>
@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-
 export default Vue.extend({
   name: "App",
 
@@ -32,3 +31,14 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+.v-main {
+  height: 100%;
+}
+</style>

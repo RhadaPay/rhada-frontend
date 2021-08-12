@@ -3,9 +3,14 @@ import VueRouter, { RouteConfig } from "vue-router";
 
 Vue.use(VueRouter);
 import Home from "@/views/Home.vue";
+import MonitorProgress from "@/views/MonitorProgress.vue";
+import CreateJob from "@/views/CreateJob.vue";
 
 const routes: Array<RouteConfig> = [
   { name: "Home", path: "/", component: Home },
+  { name: "Create", path: "/new", component: CreateJob },
+  { name: "Monitor", path: "/monitor", component: MonitorProgress },
+  { name: "Not Found Redirect", path: "/:notFound(.*)", component: Home },
 ];
 
 const router = new VueRouter({

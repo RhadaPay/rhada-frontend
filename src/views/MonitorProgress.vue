@@ -1,5 +1,5 @@
 <template>
-  <v-card>Create Job Screen</v-card>
+  <v-card>Check Progress Screen</v-card>
 </template>
 <script lang="ts">
 import Vue from "vue";
