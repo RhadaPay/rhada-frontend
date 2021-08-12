@@ -5,11 +5,13 @@ Vue.use(VueRouter);
 import Home from "@/views/Home.vue";
 import MonitorProgress from "@/views/MonitorProgress.vue";
 import CreateJob from "@/views/CreateJob.vue";
+import Payments from "@/views/Payments.vue";
 
 const routes: Array<RouteConfig> = [
   { name: "Home", path: "/", component: Home },
   { name: "Create", path: "/new", component: CreateJob },
   { name: "Monitor", path: "/monitor", component: MonitorProgress },
+  {name: "Payments", path: "/payments", component: Payments },
   { name: "Not Found Redirect", path: "/:notFound(.*)", component: Home },
 ];
 
