@@ -84,8 +84,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    onButtonClick (): void {
+    onButtonClick (item: TableData): void {
       console.log('Take me to the apply for job screen');
+      this.$router.push({ name: 'ApplyComplete' })
     }
   }
 })

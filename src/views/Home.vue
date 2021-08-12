@@ -11,37 +11,52 @@
           <v-card-title>Apply for Jobs</v-card-title>
           <v-card-subtitle>List some jobs to Apply For</v-card-subtitle>
           <v-card-actions>
-            <v-btn class="primary" @click="$router.push({ name: 'Apply' })">Apply</v-btn>
+            <v-btn class="primary" @click="$router.push({ name: 'Apply' })"
+              >Apply</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
       <v-col cols="4">
         <v-card>
           <v-card-title>Create A Stream</v-card-title>
-          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
+          <v-card-subtitle
+            >Define a new event stream to hook up your jobs to</v-card-subtitle
+          >
           <v-card-actions>
-            <v-btn class="primary" @click="$router.push({ name: 'CreateStream' })">Create</v-btn>
+            <v-btn
+              class="primary"
+              @click="$router.push({ name: 'CreateStream' })"
+              >Create</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
       <v-col cols="4">
         <v-card>
           <v-card-title>Create a Job</v-card-title>
-          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
+          <v-card-subtitle
+            >Submit a new job that you need help with</v-card-subtitle
+          >
           <v-card-actions>
-            <v-btn class="primary" @click="$router.push({ name: 'CreateJob' })">Create</v-btn>
+            <v-btn class="primary" @click="$router.push({ name: 'CreateJob' })"
+              >Create</v-btn
+            >
           </v-card-actions>
         </v-card>
-      </v-col>      
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
         <v-card>
           <v-card-title>Event Stream - Monthly</v-card-title>
-            <div>
-            <line-chart :chartData="datacollection" :options="{ responsive: true, maintainAspectRatio: false }"></line-chart>
+          <div>
+            <line-chart
+              :chartData="datacollection"
+              :options="{ responsive: true, maintainAspectRatio: false }"
+            ></line-chart>
             <button @click="fillData()">Randomize</button>
-            </div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
