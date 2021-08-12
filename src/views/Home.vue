@@ -47,7 +47,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="6">
         <v-card>
           <v-card-title>Event Stream - Monthly</v-card-title>
           <div>
@@ -59,6 +59,18 @@
           </div>
         </v-card>
       </v-col>
+      <v-col cols="6">
+        <v-card>
+          <v-card-title>Superfluid Payment Flows</v-card-title>
+          <div>
+            <line-chart
+              :chartData="datacollection"
+              :options="{ responsive: true, maintainAspectRatio: false }"
+            ></line-chart>
+            <button @click="fillData()">Randomize</button>
+          </div>
+        </v-card>
+      </v-col>      
     </v-row>
   </v-container>
 </template>

@@ -8,9 +8,11 @@ import CreateJob from "@/views/CreateJob.vue";
 import CreateStream from "@/views/CreateStream.vue";
 import Apply from "@/views/Apply.vue";
 import ApplyComplete from "@/views/ApplyComplete.vue";
+import TasksForKevin from "@/views/TasksForKevin.vue";
 
 const routes: Array<RouteConfig> = [
   { name: "Home", path: "/", component: Home },
+  { name: "Tasks", path: "/tasks", component: TasksForKevin },
   { name: "Apply", path: "/jobs/apply", component: Apply },
   { name: "ApplyComplete", path: "/jobs/confirm", component: ApplyComplete },
   { name: "CreateJob", path: "/jobs/create", component: CreateJob },
