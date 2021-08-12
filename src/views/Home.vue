@@ -1,45 +1,47 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>Panel 1</v-card-title>
-          <v-card-subtitle>// Summary Stats</v-card-subtitle>
-          <v-card-actions>
-            <v-btn @click="$router.push({ name: 'Create' })">Create</v-btn>
-            <v-btn @click="$router.push({ name: 'Monitor' })">Monitor</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card>
-          <v-card-title>Create New Job</v-card-title>
-          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
-          <v-card-actions>
-            <v-btn @click="$router.push({ name: 'Create' })">Create</v-btn>
-            <v-btn @click="$router.push({ name: 'Monitor' })">Monitor</v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-col cols="12">
+        <v-card><v-card-title>Rhada Events Dashboard</v-card-title></v-card>
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>Existing Jobs</v-card-title>
-          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
+      <v-col cols="4">
+        <v-card class="widget">
+          <v-card-title>Apply for Jobs</v-card-title>
+          <v-card-subtitle>List some jobs to Apply For</v-card-subtitle>
           <v-card-actions>
-            <v-btn @click="$router.push({ name: 'Create' })">Create</v-btn>
-            <v-btn @click="$router.push({ name: 'Monitor' })">Monitor</v-btn>
+            <v-btn class="primary" @click="$router.push({ name: 'Apply' })">Apply</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col cols="4">
         <v-card>
-          <v-card-title>A Graph</v-card-title>
-          <div class="small">
-            <line-chart :chartData="datacollection"></line-chart>
+          <v-card-title>Create A Stream</v-card-title>
+          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
+          <v-card-actions>
+            <v-btn class="primary" @click="$router.push({ name: 'CreateStream' })">Create</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card>
+          <v-card-title>Create a Job</v-card-title>
+          <v-card-subtitle>Rhada Pay, some overview goes here</v-card-subtitle>
+          <v-card-actions>
+            <v-btn class="primary" @click="$router.push({ name: 'CreateJob' })">Create</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>      
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-card>
+          <v-card-title>Event Stream - Monthly</v-card-title>
+            <div>
+            <line-chart :chartData="datacollection" :options="{ responsive: true, maintainAspectRatio: false }"></line-chart>
             <button @click="fillData()">Randomize</button>
-          </div>
+            </div>
         </v-card>
       </v-col>
     </v-row>
@@ -108,10 +110,3 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
-.v-card {
-  max-width: 500px;
-  min-width: 260px;
-  min-height: 50%;
-}
-</style>
