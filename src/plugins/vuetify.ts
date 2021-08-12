@@ -11,7 +11,7 @@ export default new Vuetify({
     dark: false,
     themes: {
       light: {
-        primary: colors.lightGreen.lighten3,
+        primary: colors.lightGreen.base,
       },
       dark: {
         primary: colors.deepOrange,
