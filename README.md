@@ -15,6 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Generate Typings for PaymentFactory.json
+```
+npm run typechain
+```
+
 ### Run your unit tests
 ```
 npm run test:unit

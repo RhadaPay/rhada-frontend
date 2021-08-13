@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card><v-card-title>Rhada Events Dashboard</v-card-title></v-card>
+        <v-card>
+          <v-card-title>Rhada Events Dashboard</v-card-title>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -49,25 +51,33 @@
     <v-row>
       <v-col cols="6">
         <v-card>
-          <v-card-title>Event Stream - Monthly</v-card-title>
+          <div class="d-flex justify-space-between">
+            <v-card-title>Event Stream - Monthly</v-card-title>
+            <v-card-actions>
+              <v-btn class="primary" @click="fillData()">Randomize</v-btn>
+            </v-card-actions>
+          </div>
           <div>
             <scatter-chart
-              :chartData="datacollectionScatter"
+              :chart-data="datacollectionScatter"
               :options="{ responsive: true, maintainAspectRatio: false }"
             ></scatter-chart>
-            <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
       </v-col>
       <v-col cols="6">
         <v-card>
-          <v-card-title>Superfluid Payment Flows</v-card-title>
+          <div class="d-flex justify-space-between">
+            <v-card-title>Superfluid Payment Flows</v-card-title>
+            <v-card-actions>
+              <v-btn class="primary" to="/payments">Payments</v-btn>
+            </v-card-actions>
+          </div>
           <div>
             <line-chart
-              :chartData="datacollection"
+              :chart-data="datacollection"
               :options="{ responsive: true, maintainAspectRatio: false }"
             ></line-chart>
-            <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
       </v-col>
@@ -78,8 +88,9 @@
 import Vue from "vue";
 
 // @ts-ignore-next-line
-import { LineChart, ScatterChart } from "@/LineChart";
+import { LineChart, ScatterChart } from "@/plugins/chart";
 import { Point } from "chart.js";
+import { VuetifyThemeVariant } from "vuetify/types/services/theme";
 
 const labels = [
   "January",
@@ -96,22 +107,19 @@ const labels = [
   "December",
 ];
 const data = (): number[] => labels.map((_) => Math.floor(Math.random() * 100));
-const scatterData = (length: number): Point[] => { 
-  return Array
-    .apply(null, new Array(length))
-    .map(_ => {
-      return {
-        x: Math.random(),
-        y: Math.random()
-      }
-    }
-  )
+const scatterData = (length: number): Point[] => {
+  return Array.apply(null, new Array(length)).map((_) => {
+    return {
+      x: Math.random(),
+      y: Math.random(),
+    };
+  });
 };
 
 export default Vue.extend({
   components: {
     LineChart,
-    ScatterChart
+    ScatterChart,
   },
   data: () => ({
     label: "Github Commits",
@@ -123,13 +131,8 @@ export default Vue.extend({
     this.fillData();
   },
   computed: {
-    color(): string {
-      const { primary } = this.$vuetify.theme.currentTheme;
-      if (primary) {
-        return primary.toString();
-      } else {
-        return "grey";
-      }
+    color(): Partial<VuetifyThemeVariant> {
+      return this.$vuetify.theme.currentTheme;
     },
   },
   methods: {
@@ -139,7 +142,7 @@ export default Vue.extend({
         datasets: [
           {
             label: "Events Recorded",
-            backgroundColor: this.color,
+            backgroundColor: this.color.accent,
             data: data(),
           },
         ],
@@ -148,13 +151,13 @@ export default Vue.extend({
         labels,
         datasets: [
           {
-            label: 'Scatter Dataset',
-            pointBackgroundColor: this.$vuetify.theme.currentTheme.accent,
-            data: scatterData(20)
-          }
-        ]
-      }
-      console.log(this.datacollectionScatter)
+            label: "Scatter Dataset",
+            pointBackgroundColor: this.color.accent,
+            backgroundColor: this.color.accent,
+            data: scatterData(20),
+          },
+        ],
+      };
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
