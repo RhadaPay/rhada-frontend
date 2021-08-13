@@ -31,7 +31,7 @@ export default {
       recipientAddress: "",
     };
   },
-/* TheGraph query on https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-mumbai
+  /* TheGraph query on https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-mumbai
 
 {
     tokens(where: { symbol: "fDAIx" }) {
@@ -86,5 +86,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

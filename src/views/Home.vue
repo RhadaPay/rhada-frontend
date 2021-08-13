@@ -70,7 +70,7 @@
             <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
-      </v-col>      
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -78,7 +78,7 @@
 import Vue from "vue";
 
 // @ts-ignore-next-line
-import { LineChart } from "@/LineChart";
+import { LineChart } from "@/plugins/chart";
 
 const labels = [
   "January",

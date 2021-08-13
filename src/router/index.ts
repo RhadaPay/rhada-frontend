@@ -23,7 +23,7 @@ const routes: Array<RouteConfig> = [
     component: CreateStream,
   },
   { name: "Monitor", path: "/monitor", component: MonitorProgress },
-  {name: "Payments", path: "/payments", component: Payments },
+  { name: "Payments", path: "/payments", component: Payments },
   { name: "Not Found Redirect", path: "/:notFound(.*)", component: Home },
 ];
 

@@ -1,9 +1,12 @@
 <template>
   <v-app>
     <v-app-bar app color="primary">
-      <v-app-bar-title>Welcome to RhadaPay</v-app-bar-title>
+      <v-toolbar-title>Welcome to RhadaPay</v-toolbar-title>
       <v-spacer />
-      <v-switch :label="theme" @change="toggleTheme" />
+      <v-btn outlined @click="toggleTheme">
+        <v-icon>{{ icon }}</v-icon>
+        {{ theme }}
+      </v-btn>
     </v-app-bar>
     <v-main class="my-5 d-flex justify-center align-center">
       <router-view />
@@ -21,6 +24,11 @@ export default Vue.extend({
   computed: {
     theme(): string {
       return this.$vuetify.theme.dark ? "Dark" : "Light";
+    },
+    icon(): string {
+      return this.$vuetify.theme.dark
+        ? "mdi-weather-night"
+        : "mdi-weather-sunny";
     },
   },
 
