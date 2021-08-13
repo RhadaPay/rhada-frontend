@@ -5,7 +5,10 @@
     </base-card>
     <base-card>
       <div class="d-flex justify-space-between">
-        <v-card-title>Check the List of Past Events Below</v-card-title>
+        <div>
+          <v-card-title>Check the List of Past Events Below</v-card-title>
+          <v-card-subtitle>It may take a few seconds for a new event to be processed</v-card-subtitle>
+        </div>
         <v-card-actions>
           <v-btn dark icon class="accent" @click="refresh()">
             <v-icon v-if="!loading">mdi-refresh</v-icon>
@@ -44,6 +47,11 @@ import Vue from "vue";
 const required = true;
 
 class MissingFieldError extends Error {};
+interface Event {
+  id: number;
+  events: number;
+  descriptor: string;
+}
 
 export default Vue.extend({
   components: {
@@ -52,22 +60,8 @@ export default Vue.extend({
   },
   data: () => ({
     loading: false,
-    items: [
-      { id: 0, events: 100, descriptor: "App Downloads" },
-      { id: 1, events: 255, descriptor: "Tweets from Vitalik" },
-      { id: 2, events: 34, descriptor: "Email Leads at Our Website" },
-      { id: 3, events: 112450, descriptor: "GiB Loaded to IPFS" },
-      { id: 4, events: 1_234_566, descriptor: "Transactions on Filecoin" },
-    ],
+    items: [] as Event[],
     formData: {
-      async onSubmit(data: FormField[]): Promise<void> {
-        const field = data[0];
-        if (field.value) {
-          await paymentFactory.createEventStream(String(field.value))
-        } else {
-          throw new MissingFieldError('Missing Value field for form');
-        }
-      },
       title: "Create A New Event Stream",
       style: "flat",
       submitText: "Create",
@@ -97,7 +91,20 @@ export default Vue.extend({
         }
       })
       this.loading = false; 
-    }
+    },
+    async onSubmit(data: FormField[]): Promise<void> {
+      const field = data[0];
+      if (field.value) {
+        await paymentFactory.createEventStream(String(field.value))
+      } else {
+        throw new MissingFieldError('Missing Value field for form');
+      }
+      this.refresh();
+    },
+  },
+  async mounted() {
+    this.formData.onSubmit = this.onSubmit;
+    await this.refresh();
   }
 });
 </script>

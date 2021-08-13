@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-card><v-card-title>Rhada Events Dashboard</v-card-title></v-card>
+        <v-card>
+          <v-card-title>Rhada Events Dashboard</v-card-title>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -49,13 +51,17 @@
     <v-row>
       <v-col cols="6">
         <v-card>
-          <v-card-title>Event Stream - Monthly</v-card-title>
+          <div class="d-flex justify-space-between">
+            <v-card-title>Event Stream - Monthly</v-card-title>
+            <v-card-actions>
+              <v-btn class="primary" @click="fillData()">Randomize</v-btn>
+            </v-card-actions>  
+          </div>        
           <div>
             <scatter-chart
-              :chartData="datacollectionScatter"
+              :chart-data="datacollectionScatter"
               :options="{ responsive: true, maintainAspectRatio: false }"
             ></scatter-chart>
-            <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
       </v-col>
@@ -69,10 +75,9 @@
           </div>
           <div>
             <line-chart
-              :chartData="datacollection"
+              :chart-data="datacollection"
               :options="{ responsive: true, maintainAspectRatio: false }"
             ></line-chart>
-            <button @click="fillData()">Randomize</button>
           </div>
         </v-card>
       </v-col>
@@ -85,6 +90,7 @@ import Vue from "vue";
 // @ts-ignore-next-line
 import { LineChart, ScatterChart } from "@/plugins/chart";
 import { Point } from "chart.js";
+import { VuetifyThemeVariant } from "vuetify/types/services/theme";
 
 const labels = [
   "January",
@@ -124,6 +130,11 @@ export default Vue.extend({
   mounted() {
     this.fillData();
   },
+  computed: {
+    color(): Partial<VuetifyThemeVariant> {
+      return this.$vuetify.theme.currentTheme
+    }
+  }, 
   methods: {
     fillData() {
       this.datacollection = {
@@ -131,7 +142,7 @@ export default Vue.extend({
         datasets: [
           {
             label: "Events Recorded",
-            backgroundColor: this.$vuetify.theme.currentTheme.primary,
+            backgroundColor: this.color.accent,
             data: data(),
           },
         ],
@@ -141,7 +152,8 @@ export default Vue.extend({
         datasets: [
           {
             label: "Scatter Dataset",
-            pointBackgroundColor: this.$vuetify.theme.currentTheme.accent,
+            pointBackgroundColor:  this.color.accent,
+            backgroundColor: this.color.accent,
             data: scatterData(20),
           },
         ],

@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <v-app-bar app color="primary">
-      <v-toolbar-title>Welcome to RhadaPay</v-toolbar-title>
+      <v-toolbar-title class="white--text">Welcome to RhadaPay</v-toolbar-title>
       <v-spacer />
-      <v-btn outlined @click="toggleTheme">
+      <v-btn dark outlined @click="toggleTheme">
         <v-icon>{{ icon }}</v-icon>
         {{ theme }}
       </v-btn>
