@@ -7,10 +7,21 @@
 import BaseCard from "@/components/BaseCard.vue";
 import BaseForm from "@/components/forms/BaseForm.vue";
 import { FormData } from "@/models/form";
+import { ethers } from "ethers";
+// import { PaymentFactory, PaymentFactory__factory } from '../../Rhadatypechain'
 import Vue from "vue";
 
 const required = true;
 const integer = true;
+
+const abi = [];
+
+const provider = ethers.getDefaultProvider('mumbai');
+
+const contractAddress = "0xd6a21d46beD2E7A36Cb6Fbe22b251a367c144395";
+
+let factory = new ethers.Contract(contractAddress, abi, provider);
+
 
 export default Vue.extend({
   components: {
@@ -113,5 +124,13 @@ export default Vue.extend({
       ],
     } as FormData,
   }),
+  methods: {
+    myClickEvent: factory.createJob(
+      FormData._description, 
+      FormData._refreshRate, 
+      FormData._eventStreamId, 
+      FormData._deadline,
+      FormData._percentage
+      )}
 });
 </script>
