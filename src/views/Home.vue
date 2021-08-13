@@ -55,8 +55,8 @@
             <v-card-title>Event Stream - Monthly</v-card-title>
             <v-card-actions>
               <v-btn class="primary" @click="fillData()">Randomize</v-btn>
-            </v-card-actions>  
-          </div>        
+            </v-card-actions>
+          </div>
           <div>
             <scatter-chart
               :chart-data="datacollectionScatter"
@@ -132,9 +132,9 @@ export default Vue.extend({
   },
   computed: {
     color(): Partial<VuetifyThemeVariant> {
-      return this.$vuetify.theme.currentTheme
-    }
-  }, 
+      return this.$vuetify.theme.currentTheme;
+    },
+  },
   methods: {
     fillData() {
       this.datacollection = {
@@ -152,7 +152,7 @@ export default Vue.extend({
         datasets: [
           {
             label: "Scatter Dataset",
-            pointBackgroundColor:  this.color.accent,
+            pointBackgroundColor: this.color.accent,
             backgroundColor: this.color.accent,
             data: scatterData(20),
           },

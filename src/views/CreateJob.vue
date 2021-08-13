@@ -1,23 +1,96 @@
 <template>
   <base-card>
+    <v-progress-linear v-if="loading" indeterminate />
     <base-form :formData="formData" :key="formData.fields.length" />
+    <v-progress-linear v-if="loading" indeterminate />
   </base-card>
 </template>
 <script lang="ts">
 import BaseCard from "@/components/BaseCard.vue";
 import BaseForm from "@/components/forms/BaseForm.vue";
-import { FormData } from "@/models/form";
+import { MissingFieldValueError } from "@/errors";
+import { FormData, FormField, Item } from "@/models/form";
+import { paymentFactory } from "@/plugins/ethers";
+import { BigNumber } from "@ethersproject/bignumber";
 import Vue from "vue";
 
 const required = true;
 const integer = true;
+
+const errorHandle = (field: FormField, callback: CallableFunction) => {
+  if (field.value) {
+    return callback(field);
+  } else {
+    console.log(field);
+    throw new MissingFieldValueError(field.name);
+  }
+};
+
+interface FormFieldWithValue extends FormField {
+  value: string | number | boolean;
+}
 
 export default Vue.extend({
   components: {
     BaseForm,
     BaseCard,
   },
+  methods: {
+    text(field: FormFieldWithValue): string {
+      return errorHandle(field, () => field.value.toString());
+    },
+    bigNum(field: FormFieldWithValue): BigNumber {
+      return errorHandle(field, () => BigNumber.from(field.value));
+    },
+    unixDatestamp(field: FormField): number {
+      if (field.dateMeta?.date) {
+        return Date.parse(field.dateMeta.date.replaceAll("-", " "));
+      } else {
+        throw new MissingFieldValueError(field.name);
+      }
+    },
+    getField(name: string, data: FormField[]): FormFieldWithValue {
+      return data.filter(
+        (field) => field.name === name
+      )[0] as FormFieldWithValue;
+    },
+    async onSubmit(formData: FormField[]) {
+      this.loading = true;
+      const initAmount = this.getField("initAmount", formData);
+      const descriptor = this.getField("descriptor", formData);
+      const refreshRate = this.getField("refreshRate", formData);
+      const eventStreamId = this.getField("eventStreamId", formData);
+      const deadline = this.getField("deadline", formData);
+      const percentage = this.getField("percentage", formData);
+
+      await paymentFactory.createJob(
+        this.bigNum(initAmount),
+        this.text(descriptor),
+        this.bigNum(refreshRate),
+        this.bigNum(eventStreamId),
+        this.unixDatestamp(deadline),
+        this.bigNum(percentage)
+      );
+      this.loading = false;
+    },
+
+    async getEventStreams(): Promise<Item[]> {
+      const streams = await paymentFactory.getEventStreams();
+      return streams.map((stream, id) => ({
+        text: stream.descriptor,
+        value: id,
+      }));
+    },
+  },
+  async mounted() {
+    this.formData.onSubmit = this.onSubmit;
+    this.loading = true;
+    this.getField("eventStreamId", this.formData.fields).items =
+      await this.getEventStreams();
+    this.loading = false;
+  },
   data: () => ({
+    loading: false,
     formData: {
       title: "Create A New Job",
       style: "flat",
@@ -25,7 +98,7 @@ export default Vue.extend({
       fields: [
         {
           order: 0,
-          name: "_description",
+          name: "descriptor",
           input: "text",
           longName: "Job Name",
           label: "Describe The Job",
@@ -35,7 +108,7 @@ export default Vue.extend({
         },
         {
           order: 1,
-          name: "_initAmount",
+          name: "initAmount",
           input: "text",
           longName: "Downpayment",
           label: "How Much Is Required Up Front",
@@ -46,7 +119,7 @@ export default Vue.extend({
         },
         {
           order: 2,
-          name: "_refreshRate",
+          name: "refreshRate",
           input: "text",
           longName: "Number of Events",
           label: "Target Number of Events before payment increases",
@@ -57,7 +130,7 @@ export default Vue.extend({
         },
         {
           order: 3,
-          name: "_eventStreamId",
+          name: "eventStreamId",
           input: "dropdown",
           longName: "Events",
           label: "Select From a List of Available Events to Connect To",
@@ -68,26 +141,14 @@ export default Vue.extend({
             text: "",
             value: "",
           },
-          items: [
-            {
-              text: "Rhada DApp Downloads",
-              value: 0,
-            },
-            {
-              text: "Email Leads at contact@rhada.co",
-              value: 1,
-            },
-            {
-              text: "Tweets From Vitalik Buterin",
-              value: 2,
-            },
-          ],
+          items: [],
         },
         {
           order: 4,
-          name: "_deadline",
+          name: "deadline",
           input: "date",
           longName: "Deadline",
+          value: "",
           rules: {
             required: true,
             disabled: false,
@@ -101,7 +162,7 @@ export default Vue.extend({
         },
         {
           order: 5,
-          name: "_percentage",
+          name: "percentage",
           input: "text",
           longName: "Payment Per Event",
           label: "% Per Event",

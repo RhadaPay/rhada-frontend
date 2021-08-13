@@ -10,9 +10,12 @@ declare global {
       selectedAddress: string;
     };
   }
-};
+}
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner()
+const signer = provider.getSigner();
 
-export const paymentFactory = PaymentFactory__factory.connect(CONTRACT_ADDRESS, signer);
+export const paymentFactory = PaymentFactory__factory.connect(
+  CONTRACT_ADDRESS,
+  signer
+);
