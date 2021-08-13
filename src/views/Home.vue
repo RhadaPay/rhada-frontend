@@ -61,7 +61,12 @@
       </v-col>
       <v-col cols="6">
         <v-card>
-          <v-card-title>Superfluid Payment Flows</v-card-title>
+          <div class="d-flex justify-space-between">
+            <v-card-title>Superfluid Payment Flows</v-card-title>
+            <v-card-actions>
+              <v-btn class="primary" to="/payments">Payments</v-btn>
+            </v-card-actions>
+          </div>
           <div>
             <line-chart
               :chartData="datacollection"
@@ -78,7 +83,7 @@
 import Vue from "vue";
 
 // @ts-ignore-next-line
-import { LineChart, ScatterChart } from "@/LineChart";
+import { LineChart, ScatterChart } from "@/plugins/chart";
 import { Point } from "chart.js";
 
 const labels = [
@@ -96,22 +101,19 @@ const labels = [
   "December",
 ];
 const data = (): number[] => labels.map((_) => Math.floor(Math.random() * 100));
-const scatterData = (length: number): Point[] => { 
-  return Array
-    .apply(null, new Array(length))
-    .map(_ => {
-      return {
-        x: Math.random(),
-        y: Math.random()
-      }
-    }
-  )
+const scatterData = (length: number): Point[] => {
+  return Array.apply(null, new Array(length)).map((_) => {
+    return {
+      x: Math.random(),
+      y: Math.random(),
+    };
+  });
 };
 
 export default Vue.extend({
   components: {
     LineChart,
-    ScatterChart
+    ScatterChart,
   },
   data: () => ({
     label: "Github Commits",
@@ -138,12 +140,12 @@ export default Vue.extend({
         labels,
         datasets: [
           {
-            label: 'Scatter Dataset',
+            label: "Scatter Dataset",
             pointBackgroundColor: this.$vuetify.theme.currentTheme.accent,
-            data: scatterData(20)
-          }
-        ]
-      }
+            data: scatterData(20),
+          },
+        ],
+      };
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5;

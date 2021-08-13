@@ -6,7 +6,7 @@
       <v-btn outlined @click="toggleTheme">
         <v-icon>{{ icon }}</v-icon>
         {{ theme }}
-      </v-btn>      
+      </v-btn>
     </v-app-bar>
     <v-main class="my-5 d-flex justify-center align-center">
       <router-view />
