@@ -122,16 +122,6 @@ export default Vue.extend({
   mounted() {
     this.fillData();
   },
-  computed: {
-    color(): string {
-      const { primary } = this.$vuetify.theme.currentTheme;
-      if (primary) {
-        return primary.toString();
-      } else {
-        return "grey";
-      }
-    },
-  },
   methods: {
     fillData() {
       this.datacollection = {
@@ -139,7 +129,7 @@ export default Vue.extend({
         datasets: [
           {
             label: "Events Recorded",
-            backgroundColor: this.color,
+            backgroundColor: this.$vuetify.theme.currentTheme.primary,
             data: data(),
           },
         ],
@@ -154,7 +144,6 @@ export default Vue.extend({
           }
         ]
       }
-      console.log(this.datacollectionScatter)
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
