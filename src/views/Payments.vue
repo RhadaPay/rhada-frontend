@@ -14,9 +14,10 @@
               ><strong>Sender:</strong> {{ senderAddress }}</v-card-text
             >
             <v-card-text
-              ><strong>Recipient:</strong> {{ recipientAddress }}</v-card-text
+              ><strong>CashFlow Recipient Address:</strong> {{ recipientAddress }}</v-card-text
             >
-            <v-card-text><strong>flowRate:</strong> {{ flowRate }}</v-card-text>
+            <v-card-text><strong>Final Applicant:</strong> {{ finalApplicant }}</v-card-text>
+            <v-card-text><strong>DAIx Per Month:</strong> {{ flowRate }}</v-card-text>
             <v-card-text
               ><strong>Super Token Address: </strong>
               {{ fDaiXtoken }}</v-card-text
@@ -49,7 +50,7 @@
               indeterminate
               large
               class="primary--text"
-              ><p>{{ amountTransferred }}</p></v-progress-circular
+              ><p>{{ amountTransferred.toFixed(5) }} DAIx</p></v-progress-circular
             >
           </div>
         </base-card>
@@ -78,12 +79,6 @@ import { FormData } from "@/models/form";
 
 export default Vue.extend({
   components: { BaseCard, BaseForm },
-  props: {
-    jobId: {
-      required: false,
-      default: "0",
-    },
-  },
   data: () => ({
     formData: {
       title: "Setup a New Payment Flow",
@@ -115,11 +110,13 @@ export default Vue.extend({
     recipientAddress: "",
     amountTransferred: 0,
     senderAddress: "" as string | null, // sender?
-    flowRate: BigNumber.from("0") as BigNumber,
+    finalApplicant: '',
+    flowRate: 0,
     provider: paymentFactory.provider,
     fDaiXtoken: "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
     flow: {} as SuperfluidFlow,
     daiPerMonth: 0,
+    jobId: 8,
   }),
   computed: {
     sf(): Framework {
@@ -143,8 +140,8 @@ export default Vue.extend({
           tokens(where: { symbol: "fDAIx" }) {
               flows(
                   where: {
-                      owner: "0x8f6112872339bf00e9985067301a0636957c6b81"
-                      recipient: "0x1df27a35703914574e690869b11643d7cd877235"
+                      owner: "${this.recipientAddress.toLowerCase()}"
+                      recipient: "${this.finalApplicant.toLowerCase()}"
                   }
               ) {
                   sum
@@ -171,12 +168,19 @@ export default Vue.extend({
     async getCashFlowParams(jobId: number): Promise<void> {
       this.senderAddress = await cashFlowFactory.cashflowsSender(jobId);
       this.recipientAddress = await cashFlowFactory.cashflowsRecipient(jobId);
-      this.flowRate = await cashFlowFactory.maxAllowedFlows(jobId);
+      this.finalApplicant = await paymentFactory.finalApplicant(jobId);
+      const flowRateBig = await cashFlowFactory.maxAllowedFlows(jobId);
+      this.flowRate = this.flowRatePerMonth(flowRateBig.toNumber());
+    },
+    flowRatePerMonth(flowRate: number): number {
+      const digits = Math.pow(10, 18);
+      const perMonth = (30 * 24 * 3600)
+      return Math.round(flowRate * perMonth / digits); 
     },
     async startPayment() {
       const user = this.sf.user({
         address: this.senderAddress!, // TODO: should be equal to TradeableCashflowWithAllowanceFactory.cashflowsSender(jobId)
-        token: this.fDaiXtoken,
+        token: this.fDaiXtoken, // thhis is the single token you start with
       });
 
       // await user.flow({
@@ -198,7 +202,7 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    await this.getCashFlowParams(0); // TODO: Get the jobId
+    await this.getCashFlowParams(this.jobId); // TODO: Get the jobId
     this.formData.onSubmit = this.getPaymentDetails;
     this.senderAddress = await paymentFactory.signer.getAddress();
     setInterval(() => this.getPaymentDetails(), 333);

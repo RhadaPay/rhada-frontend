@@ -51,7 +51,8 @@
         <v-card>
           <v-card-title>Visit App Store</v-card-title>
           <v-card-subtitle
-            >Go to the app store to 'download apps' that will trigger the event feed</v-card-subtitle
+            >Go to the app store to 'download apps' that will trigger the event
+            feed</v-card-subtitle
           >
           <v-card-actions>
             <v-btn class="primary" @click="$router.push({ name: 'AppStore' })"

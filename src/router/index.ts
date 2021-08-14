@@ -10,7 +10,7 @@ import CreateStream from "@/views/CreateStream.vue";
 import Apply from "@/views/Apply.vue";
 import ApplyComplete from "@/views/ApplyComplete.vue";
 import TasksForKevin from "@/views/TasksForKevin.vue";
-import AppStore from "@/views/AppStore.vue"
+import AppStore from "@/views/AppStore.vue";
 
 const routes: Array<RouteConfig> = [
   { name: "Home", path: "/", component: Home },

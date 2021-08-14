@@ -2,15 +2,18 @@
 <template>
   <section>
     <base-card>
-    <v-card-title class="justify-center"> Download an app </v-card-title>
-      <div style="margin-bottom: 3%; text-align: center;">
+      <v-card-title class="justify-center"> Download an app </v-card-title>
+      <div style="margin-bottom: 3%; text-align: center">
         <v-container>
           <v-row>
             <v-col>
-              <h1 color="primary"> Download <!-- {{ item.descriptor }} --> </h1>
+              <h1 color="primary">
+                Download
+                <!-- {{ item.descriptor }} -->
+              </h1>
             </v-col>
             <v-col cols="6">
-              <v-btn medium  color="primary" @click="download()">
+              <v-btn medium color="primary" @click="download()">
                 Download
               </v-btn>
             </v-col>
@@ -23,7 +26,8 @@
         <div>
           <v-card-title>Check the List of Apps Below</v-card-title>
           <v-card-subtitle
-            >Click the button on the left to choose which app to download</v-card-subtitle
+            >Click the button on the left to choose which app to
+            download</v-card-subtitle
           >
         </div>
         <v-card-actions>
@@ -37,7 +41,13 @@
         <template v-slot:default="{ item }">
           <v-list-item :key="item.id">
             <v-list-item-action>
-              <v-btn fab small depressed color="primary" @click="loadStream(item)">
+              <v-btn
+                fab
+                small
+                depressed
+                color="primary"
+                @click="loadStream(item)"
+              >
                 {{ item.id }}
               </v-btn>
             </v-list-item-action>
@@ -71,9 +81,9 @@ interface Event {
 }
 
 interface item {
-  id: number,
-  descriptor: string,
-  events: any
+  id: number;
+  descriptor: string;
+  events: any;
 }
 
 export default Vue.extend({
@@ -101,7 +111,7 @@ export default Vue.extend({
     //     },
     //   ],
     // } as FormData,
-    item: ''
+    item: "",
   }),
   methods: {
     async refresh(): Promise<void> {
@@ -119,10 +129,9 @@ export default Vue.extend({
     download(): void {
       console.log("Take me to the apply for job screen");
       // this.$router.push({ name: "ApplyComplete" });
-      
     },
-    loadStream(item: any): void { 
-      console.log("Button clicked", item );
+    loadStream(item: any): void {
+      console.log("Button clicked", item);
     },
     // async onSubmit(): Promise<void> {
     //   // const field = data[0];
