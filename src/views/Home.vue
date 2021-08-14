@@ -8,7 +8,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-card class="widget">
           <v-card-title>Apply for Jobs</v-card-title>
           <v-card-subtitle>List some jobs to Apply For</v-card-subtitle>
@@ -19,7 +19,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-card>
           <v-card-title>Create A Stream</v-card-title>
           <v-card-subtitle
@@ -34,7 +34,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-card>
           <v-card-title>Create a Job</v-card-title>
           <v-card-subtitle
@@ -43,6 +43,19 @@
           <v-card-actions>
             <v-btn class="primary" @click="$router.push({ name: 'CreateJob' })"
               >Create</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card>
+          <v-card-title>Visit App Store</v-card-title>
+          <v-card-subtitle
+            >Go to the app store to 'download apps' that will trigger the event feed</v-card-subtitle
+          >
+          <v-card-actions>
+            <v-btn class="primary" @click="$router.push({ name: 'AppStore' })"
+              >App Store</v-btn
             >
           </v-card-actions>
         </v-card>
