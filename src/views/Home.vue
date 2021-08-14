@@ -54,14 +54,21 @@
           <div class="d-flex justify-space-between">
             <v-card-title>Event Stream - Monthly</v-card-title>
             <v-card-actions>
-              <v-btn class="primary" @click="fillData()">Randomize</v-btn>
+              <v-btn class="primary" @click="fillData()">Refresh</v-btn>
             </v-card-actions>
           </div>
-          <div>
-            <scatter-chart
-              :chart-data="datacollectionScatter"
-              :options="{ responsive: true, maintainAspectRatio: false }"
-            ></scatter-chart>
+          <div v-if="!loading">
+            <bar-chart
+              :chart-data="dataCollectionBar"
+              :options="barOptions"
+            ></bar-chart>
+          </div>
+          <div
+            style="min-height: 300px"
+            v-else
+            class="d-flex align-center justify-center"
+          >
+            <v-progress-circular primary large indeterminate />
           </div>
         </v-card>
       </v-col>
@@ -73,11 +80,18 @@
               <v-btn class="primary" to="/payments">Payments</v-btn>
             </v-card-actions>
           </div>
-          <div>
+          <div v-if="!loading">
             <line-chart
               :chart-data="datacollection"
               :options="{ responsive: true, maintainAspectRatio: false }"
             ></line-chart>
+          </div>
+          <div
+            style="min-height: 300px"
+            v-else
+            class="d-flex align-center justify-center"
+          >
+            <v-progress-circular primary large indeterminate />
           </div>
         </v-card>
       </v-col>
@@ -88,9 +102,10 @@
 import Vue from "vue";
 
 // @ts-ignore-next-line
-import { LineChart, ScatterChart } from "@/plugins/chart";
-import { Point } from "chart.js";
+import { LineChart, BarChart } from "@/plugins/chart";
 import { VuetifyThemeVariant } from "vuetify/types/services/theme";
+import axios from "axios";
+import { paymentFactory } from "@/plugins/ethers";
 
 const labels = [
   "January",
@@ -107,28 +122,39 @@ const labels = [
   "December",
 ];
 const data = (): number[] => labels.map((_) => Math.floor(Math.random() * 100));
-const scatterData = (length: number): Point[] => {
-  return Array.apply(null, new Array(length)).map((_) => {
-    return {
-      x: Math.random(),
-      y: Math.random(),
-    };
-  });
-};
 
 export default Vue.extend({
   components: {
     LineChart,
-    ScatterChart,
+    BarChart,
   },
   data: () => ({
-    label: "Github Commits",
-    options: { responsive: true },
+    loading: true,
     datacollection: null as any,
-    datacollectionScatter: null as any,
+    dataCollectionBar: null as any,
+    eventStreams: [] as string[],
+    streamCount: [] as number[],
+    barOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        yAxes: [
+          {
+            ticks: { mirror: true, z: 1 },
+          },
+        ],
+      },
+    },
   }),
-  mounted() {
+  async mounted() {
+    this.loading = true;
+    await this.getStreamCount();
     this.fillData();
+    if (this.streamCount.length === 0) {
+      // triggers a chart refresh with new data
+      setTimeout(() => this.fillData(), 1500);
+    }
+    this.loading = false;
   },
   computed: {
     color(): Partial<VuetifyThemeVariant> {
@@ -147,20 +173,32 @@ export default Vue.extend({
           },
         ],
       };
-      this.datacollectionScatter = {
-        labels,
+      this.dataCollectionBar = {
+        labels: this.eventStreams,
         datasets: [
           {
-            label: "Scatter Dataset",
-            pointBackgroundColor: this.color.accent,
+            label: "Events Recorded",
+            data: this.streamCount,
             backgroundColor: this.color.accent,
-            data: scatterData(20),
           },
         ],
       };
     },
-    getRandomInt() {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+    async getStreamCount(): Promise<void> {
+      this.eventStreams = [];
+      this.streamCount = [];
+      const streams = await paymentFactory.getEventStreams();
+      await new Promise<void>((resolve) => {
+        streams.forEach((stream, id) => {
+          axios
+            .get(`http://localhost:3000/events?eventStreamId=${id}`)
+            .then((response) => {
+              this.eventStreams.push(stream.descriptor);
+              this.streamCount.push(response.data.data.length);
+            });
+        });
+        resolve();
+      });
     },
   },
 });

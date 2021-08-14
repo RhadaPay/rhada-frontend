@@ -19,7 +19,12 @@
           </v-btn>
         </v-card-actions>
       </div>
-      <v-virtual-scroll :items="items" height="300" item-height="64">
+      <v-virtual-scroll
+        v-if="!loading"
+        :items="items"
+        height="300"
+        item-height="64"
+      >
         <template v-slot:default="{ item }">
           <v-list-item :key="item.id">
             <v-list-item-action>
@@ -37,6 +42,13 @@
           <v-divider></v-divider>
         </template>
       </v-virtual-scroll>
+      <span
+        style="min-height: 300px"
+        v-else
+        class="d-flex align-center justify-center"
+      >
+        <v-progress-circular primary large indeterminate />
+      </span>
     </base-card>
   </section>
 </template>

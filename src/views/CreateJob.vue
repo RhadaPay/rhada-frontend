@@ -119,17 +119,6 @@ export default Vue.extend({
         },
         {
           order: 2,
-          name: "refreshRate",
-          input: "text",
-          longName: "Number of Events",
-          label: "Target Number of Events before payment increases",
-          rules: {
-            required,
-            integer,
-          },
-        },
-        {
-          order: 3,
           name: "eventStreamId",
           input: "dropdown",
           longName: "Events",
@@ -142,6 +131,17 @@ export default Vue.extend({
             value: "",
           },
           items: [],
+        },
+        {
+          order: 3,
+          name: "refreshRate",
+          input: "text",
+          longName: "Number of Events",
+          label: "Target Number of Events before payment increases",
+          rules: {
+            required,
+            integer,
+          },
         },
         {
           order: 4,

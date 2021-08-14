@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "typechain": "npx typechain --target ethers-v5 --out-dir src/models/typechain './src/models/PaymentFactory.json'"
+    "typechain": "npx typechain --target ethers-v5 --out-dir src/models/typechain ./src/models/*.json"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -15,6 +15,7 @@
     "@superfluid-finance/js-sdk": "^0.5.2",
     "@walletconnect/web3-provider": "^1.5.4",
     "apollo-boost": "^0.4.9",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "ethers": "^5.4.4",
