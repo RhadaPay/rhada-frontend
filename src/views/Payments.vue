@@ -19,15 +19,15 @@
           <base-card>
             <v-card-text><strong>JobID:</strong> {{ jobId }}</v-card-text>
             <v-card-text
-              ><strong>Sender:</strong> {{ sender }}</v-card-text
+              ><strong>Sender:</strong> {{ sender.toLowerCase() }}</v-card-text
             >
             <v-card-text
               ><strong>CashFlow Recipient Address:</strong>
-              {{ mediator }}</v-card-text
+              {{ mediator.toLowerCase() }}</v-card-text
             >
             <v-card-text
               ><strong>Final Applicant:</strong>
-              {{ recipient }}</v-card-text
+              {{ recipient.toLowerCase() }}</v-card-text
             >
             <v-card-text
               ><strong>DAIx Per Month:</strong> {{ currentFlow }}</v-card-text
@@ -80,7 +80,6 @@
 
 <script lang="ts">
 import BaseCard from "@/components/BaseCard.vue";
-import BaseForm from "@/components/forms/BaseForm.vue";
 import { SuperfluidFlow } from "@/models/graphql";
 import {
   query,
@@ -96,7 +95,7 @@ import SuperFluidWrapper, {
 import { FormField } from "@/models/form";
 
 export default Vue.extend({
-  components: { BaseCard, BaseForm },
+  components: { BaseCard },
   data: () => ({
     streaming: false,
     fDaiXtoken: SUPERTOKEN_ADDRESS,

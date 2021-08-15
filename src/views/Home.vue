@@ -120,7 +120,6 @@ const data = (): number[] => labels.map((_) => Math.floor(Math.random() * 100));
 
 export default Vue.extend({
   components: {
-    LineChart,
     BarChart,
     SuperfluidLineChart,
   },

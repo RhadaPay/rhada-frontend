@@ -136,7 +136,7 @@ export default Vue.extend({
           order: 3,
           name: "refreshRate",
           input: "text",
-          longName: "Number of Events",
+          longName: "Target",
           label: "Target Number of Events before payment increases",
           rules: {
             required,
@@ -145,6 +145,17 @@ export default Vue.extend({
         },
         {
           order: 4,
+          name: "percentage",
+          input: "text",
+          longName: "% Increase",
+          label: "% Increase At Each Event Target",
+          rules: {
+            required,
+            integer,
+          },
+        },        
+        {
+          order: 5,
           name: "deadline",
           input: "date",
           longName: "Deadline",
@@ -161,16 +172,16 @@ export default Vue.extend({
           default: new Date().toISOString().substr(0, 10),
         },
         {
-          order: 5,
-          name: "percentage",
+          order: 6,
+          name: "maxAllowedFlow",
           input: "text",
-          longName: "Payment Per Event",
-          label: "% Per Event",
+          longName: "Total Contract Value",
+          label: "Maximum Amount for the contract",
           rules: {
             required,
             integer,
           },
-        },
+        },        
       ],
     } as FormData,
   }),

@@ -45,7 +45,7 @@ export default Vue.extend({
     paymentHistoryQueue: [] as number[],
     mediator: "",
     recipient: "",
-    jobId: 9,
+    jobId: 10,
     labels: [] as string[]
   }),
   async mounted() {

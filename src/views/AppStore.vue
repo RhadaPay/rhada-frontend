@@ -4,7 +4,7 @@
     <v-card-title> Download the NFT Gallery Now! </v-card-title>
     <v-img :class="`${flash ? 'intense' : ''}`" src="../assets/nftimg.jpg" />
     <v-card-actions class="ma-2">
-      <v-btn medium color="primary" @click="download(4)"> Download </v-btn>
+      <v-btn medium color="primary" @click="download(eventStreamId)"> Download </v-btn>
     </v-card-actions>
   </base-card>
 </template>
@@ -19,6 +19,7 @@ export default Vue.extend({
   data: () => ({
     loading: false,
     flash: false,
+    eventStreamId: 6
   }),
   methods: {
     async download(eventStreamId: number) {

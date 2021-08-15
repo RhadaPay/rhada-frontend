@@ -3,6 +3,8 @@
     <v-app-bar app color="primary">
       <v-toolbar-title class="white--text">Welcome to RhadaPay</v-toolbar-title>
       <v-spacer />
+      <v-toolbar-title class="white--text">{{ name }}</v-toolbar-title>
+      <v-spacer />
       <v-btn dark outlined @click="toggleTheme">
         <v-icon>{{ icon }}</v-icon>
         {{ theme }}
@@ -29,6 +31,11 @@ export default Vue.extend({
       return this.$vuetify.theme.dark
         ? "mdi-weather-night"
         : "mdi-weather-sunny";
+    },
+    name(): string {
+      return this.$vuetify.theme.dark
+        ? "Carey"
+        : "Mark";
     },
   },
 
