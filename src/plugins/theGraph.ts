@@ -3,7 +3,7 @@ import { ApolloQueryResult, gql } from "apollo-boost";
 import { ApolloProvider } from "vue-apollo";
 
 export const query = (
-  recipientAddress: string,
+  cashflowAddress: string,
   finalApplicant: string
 ): string => {
   /*
@@ -14,7 +14,7 @@ export const query = (
     tokens(where: { symbol: "fDAIx" }) {
         flows(
             where: {
-              owner: "${recipientAddress.toLowerCase()}"
+              owner: "${cashflowAddress.toLowerCase()}"
               recipient: "${finalApplicant.toLowerCase()}"
             }
           ) 

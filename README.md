@@ -71,7 +71,7 @@ https://docs.superfluid.finance/superfluid/protocol-tutorials/frontend-+-nodejs#
    the SUPERTOKEN_ADDRESS. 
 * @step3 Setup the flow from the sender to the cashflow address
 * @step4 Use the query in the ./theGraph file to validate the stream has started
-     * @param owner - same as above
+     * @param cashFlowfactory - same as above
      * @param recipient - the final recipient, not the cashflow factory
      You can hit this query on repeat to keep updating the DOM with the latest values 
 ### GOTCHAS ###
@@ -79,8 +79,7 @@ https://docs.superfluid.finance/superfluid/protocol-tutorials/frontend-+-nodejs#
    in order to adjust the cashflows in response to events 
 *  Make sure all steps are completed before starting a flow -> this includes the finalSign
    which is really important as it initialises the flow 
-*  fDAIx token. If doing this manually, you need to make a one off send of 1 DAIx to the c
-   This is required by the protocol 
+*  fDAIx token. If doing this manually, you need to make a one off send of 1 DAIx to the cashflow account - This is required by the protocol 
 *  Flow rates. There is a minimum flow required to start a superfluid flow. As we are mediating with a smart contract, the minimum flow rate is doubled. For the demo, we've hardcoded 750 DAI per month initially, so the flow rate is set to 1500 DAI per month. Note that the sender automatically recieves half the flow back so the initial stream the sender sees is only 750 DAIx per month
   
 * Super DAI balance: ensure the sending account has adequate funds to begin the payment - these can be obtained from superfluid

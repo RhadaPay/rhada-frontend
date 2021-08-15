@@ -109,6 +109,7 @@ export default Vue.extend({
     maxFlow: '...loading' as string | number,
     loading: false,
     flow: {} as SuperfluidFlow,
+    paymentHistoryQueue: [] as number[]
   }),
   computed: {
     jobId(): number {
@@ -161,13 +162,24 @@ export default Vue.extend({
       this.loading = false;
     },
 
+    addToQueue (item: number): void {
+      // create a queue of length 10
+      this.paymentHistoryQueue.push(item);
+      if (this.paymentHistoryQueue.length > 10) this.paymentHistoryQueue.shift();
+    },
+
+    checkQueueForChanges(): boolean {
+      const queue = this.paymentHistoryQueue;
+      return !(queue[0] === queue.slice(-1)[0]);
+    },
+
     beginStreamListener(): void {
       /* 
       checks the graph every X milliseconds for the
       total amount streamed for the current job
       */
       const superFluidQuery = query(
-        this.sender,
+        this.mediator,
         this.recipient
       );
       console.log(superFluidQuery);
@@ -176,14 +188,15 @@ export default Vue.extend({
           .then(flow => {
             const amountTransferredSoFar = calculateTotalTransferred(flow);
             // if money is coming in, we are streaming successfully
-            amountTransferredSoFar > this.amountTransferred
+            this.addToQueue(amountTransferredSoFar);
+            this.checkQueueForChanges()
               ? this.streaming = true
               : this.streaming = false;
-              
+
             this.amountTransferred = amountTransferredSoFar;
           })
           .catch(err => console.log('No Flow Data'));
-      }, 333);
+      }, 500);
     },
   },
   async mounted() {
