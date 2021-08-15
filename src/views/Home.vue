@@ -87,27 +87,7 @@
         </v-card>
       </v-col>
       <v-col cols="6">
-        <v-card>
-          <div class="d-flex justify-space-between">
-            <v-card-title>Superfluid Payment Flows</v-card-title>
-            <v-card-actions>
-              <v-btn class="primary" to="/payments">Payments</v-btn>
-            </v-card-actions>
-          </div>
-          <div v-if="!loading">
-            <line-chart
-              :chart-data="datacollection"
-              :options="{ responsive: true, maintainAspectRatio: false }"
-            ></line-chart>
-          </div>
-          <div
-            style="min-height: 300px"
-            v-else
-            class="d-flex align-center justify-center"
-          >
-            <v-progress-circular primary large indeterminate />
-          </div>
-        </v-card>
+        <superfluid-line-chart />
       </v-col>
     </v-row>
   </v-container>
@@ -120,6 +100,7 @@ import { LineChart, BarChart } from "@/plugins/chart";
 import { VuetifyThemeVariant } from "vuetify/types/services/theme";
 import axios from "axios";
 import { paymentFactory } from "@/plugins/ethers";
+import SuperfluidLineChart from "@/components/SuperfluidLineChart.vue";
 
 const labels = [
   "January",
@@ -141,6 +122,7 @@ export default Vue.extend({
   components: {
     LineChart,
     BarChart,
+    SuperfluidLineChart,
   },
   data: () => ({
     loading: true,

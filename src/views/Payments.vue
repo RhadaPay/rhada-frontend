@@ -173,6 +173,14 @@ export default Vue.extend({
       return !(queue[0] === queue.slice(-1)[0]);
     },
 
+    calculateIfStreaming(amountTransferredSoFar: number): void {
+      // if money is coming in, we are streaming successfully
+      this.addToQueue(amountTransferredSoFar);
+      this.checkQueueForChanges()
+        ? this.streaming = true
+        : this.streaming = false;
+    },
+
     beginStreamListener(): void {
       /* 
       checks the graph every X milliseconds for the
@@ -187,12 +195,7 @@ export default Vue.extend({
         getPaymentDetails(this.$apolloProvider, superFluidQuery)
           .then(flow => {
             const amountTransferredSoFar = calculateTotalTransferred(flow);
-            // if money is coming in, we are streaming successfully
-            this.addToQueue(amountTransferredSoFar);
-            this.checkQueueForChanges()
-              ? this.streaming = true
-              : this.streaming = false;
-
+            this.calculateIfStreaming(amountTransferredSoFar);
             this.amountTransferred = amountTransferredSoFar;
           })
           .catch(err => console.log('No Flow Data'));

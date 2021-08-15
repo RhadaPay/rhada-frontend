@@ -9,7 +9,9 @@
     color="primary"
     @click="onClick"
   >
-    <v-icon class="accent--text">{{ complete ? "mdi-check" : "mdi-select" }}</v-icon>
+    <v-icon class="accent--text">{{
+      complete ? "mdi-check" : "mdi-select"
+    }}</v-icon>
   </v-btn>
 </template>
 <script lang="ts">

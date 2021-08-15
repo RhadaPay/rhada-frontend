@@ -57,8 +57,12 @@ export default class sfWrapper {
   }
 
   private async getFlows() {
-    this.flowRates.current = (await cashFlowFactory.getAllowedFlow(this.jobId)).toNumber();
-    this.flowRates.max = (await cashFlowFactory.maxAllowedFlows(this.jobId)).toNumber();
+    this.flowRates.current = (
+      await cashFlowFactory.getAllowedFlow(this.jobId)
+    ).toNumber();
+    this.flowRates.max = (
+      await cashFlowFactory.maxAllowedFlows(this.jobId)
+    ).toNumber();
     this.flows.current = sfWrapper.flowRatePerMonth(this.flowRates.current);
     this.flows.max = sfWrapper.flowRatePerMonth(this.flowRates.max);
   }

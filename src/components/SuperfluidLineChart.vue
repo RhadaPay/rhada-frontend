@@ -23,12 +23,15 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { cashFlowFactory, paymentFactory } from '@/plugins/ethers';
+import { cashFlowFactory, paymentFactory } from "@/plugins/ethers";
 // @ts-ignore-next-line
 import { LineChart } from "@/plugins/chart";
 import { VuetifyThemeVariant } from "vuetify/types/services/theme";
-import { calculateTotalTransferred, getPaymentDetails, query } from "@/plugins/theGraph";
-
+import {
+  calculateTotalTransferred,
+  getPaymentDetails,
+  query,
+} from "@/plugins/theGraph";
 
 export default Vue.extend({
   components: {
@@ -37,19 +40,19 @@ export default Vue.extend({
   data: () => ({
     loading: true,
     datacollection: null as any,
-    dataCollectionBar: null as any,
     eventStreams: [] as string[],
     streamCount: [] as number[],
     paymentHistoryQueue: [] as number[],
-    mediator: '',
-    recipient: '',
+    mediator: "",
+    recipient: "",
     jobId: 9,
+    labels: [] as string[]
   }),
   async mounted() {
     this.loading = true;
     this.mediator = await cashFlowFactory.cashflowsRecipient(this.jobId);
     this.recipient = await paymentFactory.finalApplicant(this.jobId);
-    this.beginStreamListener()
+    this.beginStreamListener();
     this.loading = false;
   },
   computed: {
@@ -60,20 +63,34 @@ export default Vue.extend({
   methods: {
     fillData() {
       this.datacollection = {
-        labels: this.paymentHistoryQueue,
+        labels: this.labels,
         datasets: [
           {
-            label: "Events Recorded",
+            label: `Payment Streams for Job ${this.jobId}`,
             backgroundColor: this.color.accent,
             data: this.paymentHistoryQueue,
           },
         ],
       };
     },
-    addToQueue (item: number): void {
+    addToQueue(item: number): void {
       // create a queue of length 10
       this.paymentHistoryQueue.push(item);
-      if (this.paymentHistoryQueue.length > 30) this.paymentHistoryQueue.shift();
+      if (this.paymentHistoryQueue.length > 30)
+        this.paymentHistoryQueue.shift();
+    },
+    getTimeStamp (): string {
+      const hh = new Date().getHours();
+      const ss = new Date().getSeconds();
+      const mm = new Date().getMinutes();
+      const ms = new Date().getMilliseconds();
+      return `${hh}:${mm}:${ss}:${ms}`;
+    },
+
+    labelQueue(): void {
+      this.labels.push(this.getTimeStamp());
+      if (this.labels.length > 30)
+        this.labels.shift();
     },
 
     checkQueueForChanges(): boolean {
@@ -85,20 +102,19 @@ export default Vue.extend({
       checks the graph every X milliseconds for the
       total amount streamed for the current job
       */
-      const superFluidQuery = query(
-        this.mediator,
-        this.recipient
-      );
+      const superFluidQuery = query(this.mediator, this.recipient);
       console.log(superFluidQuery);
       setInterval(() => {
         getPaymentDetails(this.$apolloProvider, superFluidQuery)
-          .then(flow => {
+          .then((flow) => {
             const amountTransferredSoFar = calculateTotalTransferred(flow);
+            this.labelQueue();
             this.addToQueue(amountTransferredSoFar);
+            this.fillData();
           })
-          .catch(err => console.log('No Flow Data'));
+          .catch((err) => console.log("No Flow Data"));
       }, 500);
-    }
+    },
   },
 });
 </script>

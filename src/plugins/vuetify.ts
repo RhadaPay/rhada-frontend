@@ -9,7 +9,7 @@ Vue.use(Vuetify);
 export default new Vuetify({
   // adjust global themes here
   theme: {
-    dark: false,
+    dark: true,
     themes: {
       light: {
         primary: colors.lightGreen.base,
