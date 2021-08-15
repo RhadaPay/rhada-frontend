@@ -4,7 +4,7 @@ type Value = string | number | boolean | null;
 
 export interface Item {
   text: string;
-  value: string | boolean | number | null;
+  value: string | boolean | number;
 }
 
 export interface FormData {

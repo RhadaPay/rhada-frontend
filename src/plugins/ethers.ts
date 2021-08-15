@@ -1,7 +1,4 @@
-import {
-  TradeableCashflowWithAllowanceFactory,
-  TradeableCashflowWithAllowanceFactory__factory,
-} from "@/models/typechain";
+import { TradeableCashflowWithAllowanceFactory__factory } from "@/models/typechain";
 import { PaymentFactory__factory } from "@/models/typechain/factories/PaymentFactory__factory";
 import { ethers } from "ethers";
 

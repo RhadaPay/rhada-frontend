@@ -5,3 +5,9 @@ export class MissingFieldValueError extends Error {
     this.name = "MissingFieldValueError";
   }
 }
+
+export class UninitializedError extends Error {
+  constructor(public message: string) {
+    super(message);
+  }
+}

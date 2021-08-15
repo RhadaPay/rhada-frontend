@@ -23,19 +23,19 @@
       <template v-slot:[`item.applyForJob`]="props">
         <signing-button
           :disabled="
-            props.item.creator === currentAddress || !!props.item.finalApplicant
+            props.item.creator === currentAddress || props.item.applicantSigned
           "
           @click="applyForJob(props.item)"
-          :complete="!!props.item.finalApplicant"
+          :complete="props.item.applicantSigned"
         />
       </template>
       <template v-slot:[`item.chooseApplicant`]="props">
         <signing-button
           :disabled="
-            props.item.creator !== currentAddress || !!props.item.finalApplicant
+            props.item.creator !== currentAddress || props.item.applicantSigned
           "
           @click="confirmApplicant(props.item)"
-          :complete="!!props.item.finalApplicant"
+          :complete="props.item.applicantSigned"
         />
       </template>
       <template v-slot:[`item.initApplicantSign`]="props">
@@ -173,7 +173,7 @@ export default Vue.extend({
       this.loading = true;
       console.log(item);
       await paymentFactory.initCreatorSign(item.id, {
-        value: 1,
+        value: item.downPayment,
       });
       this.loading = false;
     },
