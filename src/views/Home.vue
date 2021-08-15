@@ -204,12 +204,16 @@ export default Vue.extend({
       const streams = await paymentFactory.getEventStreams();
       await new Promise<void>((resolve) => {
         streams.forEach((stream, id) => {
-          axios
-            .get(`http://localhost:3000/events?eventStreamId=${id}`)
-            .then((response) => {
-              this.eventStreams.push(stream.descriptor);
-              this.streamCount.push(response.data.data.length);
-            });
+          try {
+            axios
+              .get(`http://localhost:3000/events?eventStreamId=${id}`)
+              .then((response) => {
+                this.eventStreams.push(stream.descriptor);
+                this.streamCount.push(response.data.data.length);
+              });
+          } catch (err) {
+            console.warn(err);
+          }
         });
         resolve();
       });

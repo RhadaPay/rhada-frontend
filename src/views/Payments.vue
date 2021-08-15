@@ -14,10 +14,16 @@
               ><strong>Sender:</strong> {{ senderAddress }}</v-card-text
             >
             <v-card-text
-              ><strong>CashFlow Recipient Address:</strong> {{ recipientAddress }}</v-card-text
+              ><strong>CashFlow Recipient Address:</strong>
+              {{ recipientAddress }}</v-card-text
             >
-            <v-card-text><strong>Final Applicant:</strong> {{ finalApplicant }}</v-card-text>
-            <v-card-text><strong>DAIx Per Month:</strong> {{ flowRate }}</v-card-text>
+            <v-card-text
+              ><strong>Final Applicant:</strong>
+              {{ finalApplicant }}</v-card-text
+            >
+            <v-card-text
+              ><strong>DAIx Per Month:</strong> {{ flowRate }}</v-card-text
+            >
             <v-card-text
               ><strong>Super Token Address: </strong>
               {{ fDaiXtoken }}</v-card-text
@@ -50,7 +56,9 @@
               indeterminate
               large
               class="primary--text"
-              ><p>{{ amountTransferred.toFixed(5) }} DAIx</p></v-progress-circular
+              ><p>
+                {{ amountTransferred.toFixed(5) }} DAIx
+              </p></v-progress-circular
             >
           </div>
         </base-card>
@@ -110,7 +118,7 @@ export default Vue.extend({
     recipientAddress: "",
     amountTransferred: 0,
     senderAddress: "" as string | null, // sender?
-    finalApplicant: '',
+    finalApplicant: "",
     flowRate: 0,
     provider: paymentFactory.provider,
     fDaiXtoken: "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
@@ -174,8 +182,8 @@ export default Vue.extend({
     },
     flowRatePerMonth(flowRate: number): number {
       const digits = Math.pow(10, 18);
-      const perMonth = (30 * 24 * 3600)
-      return Math.round(flowRate * perMonth / digits); 
+      const perMonth = 30 * 24 * 3600;
+      return Math.round((flowRate * perMonth) / digits);
     },
     async startPayment() {
       const user = this.sf.user({

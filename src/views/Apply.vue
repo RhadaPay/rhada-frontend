@@ -8,142 +8,93 @@
           <v-progress-circular v-else indeterminate />
         </v-btn>
         <v-switch
-        class="mx-3"
-        :label="`${hideComplete ? 'Show' : 'Hide'} Completed`"
-        v-model="hideComplete"/>        
+          class="mx-3"
+          :label="`${hideComplete ? 'Show' : 'Hide'} Completed`"
+          v-model="hideComplete"
+        />
       </v-card-actions>
     </div>
     <v-data-table
       :loading="loading"
       v-model="selected"
       :headers="headers"
-      :items="tableData.filter(row => !row.finalSign || hideComplete)"
+      :items="tableData.filter((row) => !row.finalSign || hideComplete)"
     >
       <template v-slot:[`item.applyForJob`]="props">
-        <v-btn
-          class="details"
-          depressed
-          :disabled="props.item.creator === currentAddress || !!props.item.finalApplicant"
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.creator === currentAddress || !!props.item.finalApplicant
+          "
           @click="applyForJob(props.item)"
-          ><the-select-box :complete="!!props.item.finalApplicant"/></v-btn
-        >
+          :complete="!!props.item.finalApplicant"
+        />
       </template>
       <template v-slot:[`item.chooseApplicant`]="props">
-        <v-btn
-          class="details"
-          :disabled="props.item.creator !== currentAddress || !!props.item.finalApplicant"
-          depressed
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.creator !== currentAddress || !!props.item.finalApplicant
+          "
           @click="confirmApplicant(props.item)"
-          ><the-select-box :complete="!!props.item.finalApplicant"/></v-btn
-        >
+          :complete="!!props.item.finalApplicant"
+        />
       </template>
       <template v-slot:[`item.initApplicantSign`]="props">
-        <v-btn
-          class="details"
-          :disabled="props.item.finalApplicant !== currentAddress || props.item.applicantSigned"
-          depressed
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.finalApplicant !== currentAddress ||
+            props.item.applicantSigned
+          "
           @click="applicantSign(props.item)"
-          ><the-select-box :complete="props.item.applicantSigned"/></v-btn
-        >
+          :complete="props.item.applicantSigned"
+        />
       </template>
       <template v-slot:[`item.initCreatorSign`]="props">
-        <v-btn
-          class="details"
-          :disabled="props.item.creator !== currentAddress || props.item.creatorSigned"
-          depressed
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.creator !== currentAddress || props.item.creatorSigned
+          "
           @click="creatorSign(props.item)"
-          ><the-select-box :complete="props.item.creatorSigned"/></v-btn
-        >
-      </template> 
+          :complete="props.item.creatorSigned"
+        />
+      </template>
       <template v-slot:[`item.submitWork`]="props">
-        <v-btn
-          class="details"
-          :disabled="props.item.finalApplicant !== currentAddress || props.item.workSubmitted"
-          depressed
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.finalApplicant !== currentAddress ||
+            props.item.workSubmitted
+          "
           @click="submitWork(props.item)"
-          ><the-select-box :complete="props.item.workSubmitted"/></v-btn
-        >
+          :complete="props.item.workSubmitted"
+        />
       </template>
       <template v-slot:[`item.finalSign`]="props">
-        <v-btn
-          class="details"
-          :disabled="props.item.creator !== currentAddress || props.item.finalSign"
-          depressed
-          icon
-          small
-          dark
-          color="primary"
+        <signing-button
+          :disabled="
+            props.item.creator !== currentAddress || props.item.finalSign
+          "
           @click="finalSign(props.item)"
-          ><the-select-box :complete="props.item.finalSign"/></v-btn
-        >
-      </template>                               
+          :complete="props.item.finalSign"
+        />
+      </template>
     </v-data-table>
   </base-card>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import BaseCard from "@/components/BaseCard.vue";
-import TheSelectBox from "@/components/TheSelectBox.vue";
+import SigningButton from "@/components/SigningButton.vue";
 import { paymentFactory } from "@/plugins/ethers";
-
-interface TableData {
-  id: number;
-  descriptor: string;
-  deadline: string;
-  refreshRate: number;
-  eventStream: string;
-  percentage: number;
-  downPayment: number;
-  creator: string;
-  finalApplicant: string;
-  applicantSigned: boolean;
-  creatorSigned: boolean;
-  workSubmitted: boolean;
-  finalSign: boolean;
-}
-
-interface TableHeaders {
-  text: string;
-  value: keyof TableData | ApplicationStages
-}
-
-type ApplicationStages = "applyForJob"
-  | "chooseApplicant"
-  | "initApplicantSign"
-  | "initCreatorSign"
-  | "submitWork"
-  | "finalSign"
-  ;
+import { TableData, TableHeaders } from "@/models/table";
 
 export default Vue.extend({
   components: {
     BaseCard,
-    TheSelectBox
+    SigningButton,
   },
   data: () => ({
     hideComplete: true,
     loading: false,
-    currentAddress: '',
+    currentAddress: "",
     selected: [],
     tableData: [] as Array<TableData>,
   }),
@@ -152,7 +103,7 @@ export default Vue.extend({
       return [
         {
           text: "Job ID",
-          value: 'id'
+          value: "id",
         },
         {
           text: "Description",
@@ -197,7 +148,7 @@ export default Vue.extend({
         {
           text: "Final Sign",
           value: "finalSign",
-        },                                
+        },
       ];
     },
   },
@@ -222,47 +173,69 @@ export default Vue.extend({
       this.loading = true;
       console.log(item);
       await paymentFactory.initCreatorSign(item.id, {
-        value: 1
+        value: 1,
       });
       this.loading = false;
     },
     async submitWork(item: TableData): Promise<void> {
       this.loading = true;
-      await paymentFactory.submitWork(item.id, 'NOT PROVIDED');
+      await paymentFactory.submitWork(item.id, "NOT PROVIDED");
       this.loading = false;
     },
     async finalSign(item: TableData): Promise<void> {
       this.loading = true;
       const allowedFlow = 289351851851852;
-      const maxAllowedFlow = 578703703703704
-      await paymentFactory.finalSign(true, item.id, allowedFlow, maxAllowedFlow);
+      const maxAllowedFlow = 578703703703704;
+      await paymentFactory.finalSign(
+        true,
+        item.id,
+        allowedFlow,
+        maxAllowedFlow
+      );
       this.loading = false;
     },
     async getTableData(): Promise<void> {
       this.loading = true;
-      const jobs = await paymentFactory.getJobs();
       const rows: TableData[] = [];
-      jobs.forEach(async (job, jobId) => {
-        const tableRow: TableData = {
-          id: jobId,
-          descriptor: job.descriptor,
-          deadline: new Date(job.deadline.toNumber())
-            .toISOString()
-            .substring(0, 10),
-          refreshRate: job.refreshRate.toNumber(),
-          eventStream: await paymentFactory.eventStreams(
-            job.eventStreamId.toNumber()
-          ),
-          creator: job.creator,
-          finalApplicant: await paymentFactory.finalApplicant(jobId),
-          applicantSigned: job.applicantSigned,
-          creatorSigned: job.creatorSigned,
-          workSubmitted: job.workSubmitted,
-          percentage: job.percentage,
-          downPayment: job.amount.toNumber(),
-          finalSign: job.state === 3
-        };
-        rows.push(tableRow);
+
+      const jobs = await paymentFactory.getJobs();
+      jobs.forEach(async (job, id) => {
+        // Destructure constants
+        const {
+          descriptor,
+          creatorSigned,
+          workSubmitted,
+          percentage,
+          applicantSigned,
+          creator,
+        } = job;
+
+        // convert big numbers to numbers
+        const deadline = job.deadline.toNumber();
+        const refreshRate = job.refreshRate.toNumber();
+        const downPayment = job.amount.toNumber();
+        const eventStreamId = job.eventStreamId.toNumber();
+
+        // additional data calls
+        const eventStream = await paymentFactory.eventStreams(eventStreamId);
+        const finalApplicant = await paymentFactory.finalApplicant(id);
+
+        // create object and push
+        rows.push({
+          id,
+          descriptor,
+          applicantSigned,
+          creatorSigned,
+          workSubmitted,
+          percentage,
+          creator,
+          refreshRate,
+          eventStream,
+          finalApplicant,
+          downPayment,
+          deadline: new Date(deadline).toISOString().substring(0, 10),
+          finalSign: job.state === 3,
+        });
       });
       this.tableData = rows;
     },
